@@ -1,16 +1,16 @@
 {
-  "name": "Zama FHE Game Demo",
-  "image": "mcr.microsoft.com/vscode/devcontainers/python:3.10",
+  "name": "Zama FHE Auction Duel",
+  "image": "mcr.microsoft.com/vscode/devcontainers/base:ubuntu-22.04",
   "features": {
     "ghcr.io/devcontainers/features/python:1": {
       "version": "3.10"
     }
   },
-  "postCreateCommand": "pip install -U pip wheel setuptools && pip install concrete-python --index-url https://pypi.zama.ai/simple",
+  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y python3-tk python3.10-dev python3.10-distutils && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && sudo python3.10 get-pip.py && pip3 install -U pip wheel setuptools && pip3 install concrete-python --index-url https://pypi.zama.ai/simple",
   "forwardPorts": [12345],
   "customizations": {
     "vscode": {
-      "extensions": ["ms-python.python", "ms-toolsai.jupyter"]
+      "extensions": ["ms-python.python"]
     }
   },
   "runArgs": ["--init"],
