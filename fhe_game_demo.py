@@ -1,31 +1,23 @@
 # Zama FHE Demo: Guess the Secret Score Game with GUI & Multiplayer
 # Inspired by Zama Concrete docs (github.com/zama-ai/concrete)
-# Run: pip install -U pip wheel setuptools; pip install concrete-python --index-url https://pypi.zama.ai/simple; python fhe_game_demo.py
+# Prerequisite: Run in Codespaces – dependencies auto-installed
+# Run: python fhe_game_demo.py single
 
-import subprocess
-import sys
-try:
-    from concrete import fhe  # Import API từ concrete-python
-except ImportError:
-    print("Installing dependencies from Zama PyPI... Please wait.")
-    # Cài pip tools trước
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "-U", "pip", "wheel", "setuptools"])
-    # Cài concrete-python từ Zama index URL (CPU version)
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "concrete-python", "--index-url", "https://pypi.zama.ai/simple"])
-    from concrete import fhe  # Import lại
-
+from concrete import fhe  # Import from concrete-python
 import tkinter as tk
 from tkinter import messagebox
 import socket
-import threading
 import random
 
 # FHE Comparison Function
-@fhe.compiler({"guess": "encrypted", "secret": "encrypted"})
 def compare_scores(guess, secret):
-    return 1 if guess < secret else 0  # 1 = guess lower, 0 = higher/equal
+    return 1 if guess < secret else 0  # 1 = lower, 0 = higher/equal
 
-compiled_compare = compare_scores.compile((5, 5))  # Compile for 0-10 range
+# Compile FHE circuit
+compiler = fhe.Compiler(compare_scores, {"guess": "encrypted", "secret": "encrypted"})
+inputset = [(i, j) for i in range(11) for j in range(11)]  # Input set for 0-10
+circuit = compiler.compile(inputset)
+circuit.keygen()  # Generate keys
 
 class FHEGame:
     def __init__(self, mode="single"):
@@ -47,9 +39,9 @@ class FHEGame:
         try:
             guess = int(self.entry.get())
             if 0 <= guess <= 10:
-                encrypted_guess = fhe.encrypt(guess, compiled_compare)
-                encrypted_secret = fhe.encrypt(self.secret_score, compiled_compare)
-                result = compiled_compare(encrypted_guess, encrypted_secret)
+                encrypted_guess, encrypted_secret = circuit.encrypt(guess, self.secret_score)
+                encrypted_result = circuit.run(encrypted_guess, encrypted_secret)
+                result = circuit.decrypt(encrypted_result)
                 feedback = "Lower!" if result == 1 else "Higher or Equal!"
                 self.feedback_label.config(text=feedback)
                 if guess == self.secret_score:
@@ -83,9 +75,9 @@ if __name__ == "__main__":
         server.listen(1)
         conn, addr = server.accept()
         guess = int(conn.recv(1024).decode())
-        encrypted_guess = fhe.encrypt(guess, compiled_compare)
-        encrypted_secret = fhe.encrypt(random.randint(0, 10), compiled_compare)
-        result = compare_scores(encrypted_guess, encrypted_secret)
+        encrypted_guess, encrypted_secret = circuit.encrypt(guess, random.randint(0, 10))
+        encrypted_result = circuit.run(encrypted_guess, encrypted_secret)
+        result = circuit.decrypt(encrypted_result)
         feedback = "Lower!" if result == 1 else "Higher or Equal!"
         conn.send(feedback.encode())
         conn.close()
