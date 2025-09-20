@@ -7,10 +7,10 @@ import sys
 try:
     from concrete import fhe  # Import API từ concrete-python
 except ImportError:
-    print("Installing concrete-python from Zama PyPI... Please wait.")
+    print("Installing dependencies from Zama PyPI... Please wait.")
     # Cài pip tools trước
     subprocess.check_call([sys.executable, "-m", "pip", "install", "-U", "pip", "wheel", "setuptools"])
-    # Cài concrete-python từ Zama index
+    # Cài concrete-python từ Zama index URL (CPU version)
     subprocess.check_call([sys.executable, "-m", "pip", "install", "concrete-python", "--index-url", "https://pypi.zama.ai/simple"])
     from concrete import fhe  # Import lại
 
