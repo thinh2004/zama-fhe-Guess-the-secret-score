@@ -1,16 +1,18 @@
 # Zama FHE Demo: Guess the Secret Score Game with GUI & Multiplayer
 # Inspired by Zama Concrete docs (github.com/zama-ai/concrete)
-# Run: python fhe_game_demo.py (single/multi/server) after manual install: pip install concrete-python concrete-compiler
+# Run: pip install -U pip wheel setuptools; pip install concrete-python --index-url https://pypi.zama.ai/simple; python fhe_game_demo.py
 
 import subprocess
 import sys
 try:
     from concrete import fhe  # Import API từ concrete-python
 except ImportError:
-    print("Installing dependencies... Please wait.")
-    # Sửa lỗi cú pháp: truyền list package
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "concrete-python", "concrete-compiler"])
-    from concrete import fhe  # Import lại sau cài đặt
+    print("Installing concrete-python from Zama PyPI... Please wait.")
+    # Cài pip tools trước
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "-U", "pip", "wheel", "setuptools"])
+    # Cài concrete-python từ Zama index
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "concrete-python", "--index-url", "https://pypi.zama.ai/simple"])
+    from concrete import fhe  # Import lại
 
 import tkinter as tk
 from tkinter import messagebox
