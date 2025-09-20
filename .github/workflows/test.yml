@@ -10,17 +10,17 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.10'
+        python-version: '3.10'  # Sử dụng 3.10 để tương thích với concrete
     - name: Install system dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y python3-tk
-        sudo apt-get install -y libomp-dev  # Native dependency for concrete
+        sudo apt-get install -y libomp-dev
     - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
         pip install concrete-python concrete-compiler
     - name: Run demo test
-      run: python fhe_game_demo.py single  # Simulated run (non-interactive)
+      run: python fhe_game_demo.py single  # Simulated run
     - name: Lint code
       run: pip install flake8; flake8 fhe_game_demo.py
