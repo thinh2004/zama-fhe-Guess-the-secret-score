@@ -1,22 +1,22 @@
-# Zama FHE Game Demo
+# Zama FHE Auction Duel
 
 ## Overview
-Simple FHE game using Zama Concrete: Guess an encrypted score with privacy!
+Secret bidding game with FHE! Win items by outbidding opponents privately.
 
 ## Setup in Codespaces
-1. Click "Code" > "Codespaces" > "Create codespace on main".
-2. Wait for build (installs Python 3.10, concrete-python from Zama PyPI).
-3. Open terminal: `python fhe_game_demo.py single` – GUI opens!
-4. For multiplayer: Run server in one terminal, client in another.
+1. Click "Code" > "Codespaces" > "Create codespace".
+2. Wait for build (installs Python 3.10, Tkinter, concrete-python).
+3. Run: `python3.10 fhe_auction_duel.py`.
 
 ## Features
-- FHE: Encrypted comparisons with Concrete.
-- GUI: Tkinter for input/hints.
-- Multiplayer: Socket-based.
+- FHE: Encrypted bid comparisons.
+- GUI: Tkinter (falls back to console if missing).
+- Strategy: Outsmart opponents!
 
-## Why Zama FHE?
-- Privacy: Score stays encrypted during comparison.
-- Speed: <1ms bootstrapping.
+## Install Manually
+- `sudo apt-get install python3.10 python3-tk`
+- `pip3 install -U pip wheel setuptools`
+- `pip3 install concrete-python --index-url https://pypi.zama.ai/simple`
 
 #ZamaFHE #ZamaCreatorProgram
 Fork and play! @zama_fhe
