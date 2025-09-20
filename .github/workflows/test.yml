@@ -15,6 +15,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y python3-tk
+        sudo apt-get install -y libomp-dev  # Thêm dependency native cho concrete
     - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
