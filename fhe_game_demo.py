@@ -5,11 +5,11 @@
 import subprocess
 import sys
 try:
-    from concrete import fhe
+    from concrete.fhe import fhe  # Sửa import từ concrete.fhe
 except ImportError:
     print("Installing concrete-compiler... Please wait.")
     subprocess.check_call([sys.executable, "-m", "pip", "install", "concrete-compiler"])
-    from concrete import fhe
+    from concrete.fhe import fhe  # Sửa import sau cài đặt
 
 import tkinter as tk
 from tkinter import messagebox
