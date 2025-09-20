@@ -1,19 +1,22 @@
-# Zama FHE Demo: Guess the Secret Score Game
+# Zama FHE Game Demo
 
 ## Overview
-Interactive game with FHE for encrypted guessing. Features GUI (Tkinter), Multiplayer (socket), and GitHub Actions!
+Simple FHE game using Zama Concrete: Guess an encrypted score with privacy!
 
-## Setup
-1. Install: `pip install -U pip wheel setuptools; pip install concrete-python --index-url https://pypi.zama.ai/simple`
-2. Single: `python fhe_game_demo.py`
-3. Server: `python fhe_game_demo.py server`
-4. Client: `python fhe_game_demo.py multi`
+## Setup in Codespaces
+1. Click "Code" > "Codespaces" > "Create codespace on main".
+2. Wait for build (installs Python 3.10, concrete-python from Zama PyPI).
+3. Open terminal: `python fhe_game_demo.py single` – GUI opens!
+4. For multiplayer: Run server in one terminal, client in another.
 
 ## Features
-- FHE: Encrypted comparisons.
-- GUI: Tkinter interface.
+- FHE: Encrypted comparisons with Concrete.
+- GUI: Tkinter for input/hints.
 - Multiplayer: Socket-based.
-- Actions: Auto-test with Zama PyPI.
+
+## Why Zama FHE?
+- Privacy: Score stays encrypted during comparison.
+- Speed: <1ms bootstrapping.
 
 #ZamaFHE #ZamaCreatorProgram
 Fork and play! @zama_fhe
