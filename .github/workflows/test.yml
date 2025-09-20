@@ -1,1 +1,19 @@
+name: Test FHE Game Demo
 
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - name: Install dependencies
+      run: pip install concrete-compiler
+    - name: Run demo test
+      run: python fhe_game_demo.py single  # Simulated run (non-interactive)
+    - name: Lint code
+      run: pip install flake8; flake8 fhe_game_demo.py
