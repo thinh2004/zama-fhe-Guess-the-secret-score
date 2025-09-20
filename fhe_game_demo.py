@@ -1,8 +1,16 @@
 # Zama FHE Demo: Guess the Secret Score Game with GUI & Multiplayer
 # Inspired by Zama Concrete docs (github.com/zama-ai/concrete)
-# Run: pip install concrete-compiler; python fhe_game_demo.py (server) or client mode
+# Run: pip install concrete-compiler; python fhe_game_demo.py (single/multi/server)
 
-from concrete import fhe
+import subprocess
+import sys
+try:
+    from concrete import fhe
+except ImportError:
+    print("Installing concrete-compiler... Please wait.")
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "concrete-compiler"])
+    from concrete import fhe
+
 import tkinter as tk
 from tkinter import messagebox
 import socket
@@ -50,11 +58,9 @@ class FHEGame:
             self.feedback_label.config(text="Enter a number!", fg="red")
 
     def connect_multi(self):
-        # Simple multiplayer: Connect to server for Player 2's secret
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.connect(('localhost', 12345))  # Assume server running
-            # Send guess, receive encrypted result (simplified)
+            sock.connect(('localhost', 12345))
             sock.send(str(self.entry.get()).encode())
             feedback = sock.recv(1024).decode()
             self.feedback_label.config(text=feedback)
@@ -65,12 +71,10 @@ class FHEGame:
     def run(self):
         self.root.mainloop()
 
-# Run as Server (for Multiplayer)
 if __name__ == "__main__":
     import sys
     mode = sys.argv[1] if len(sys.argv) > 1 else "single"
     if mode == "server":
-        # Simple server for Player 2's secret
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server.bind(('localhost', 12345))
         server.listen(1)
@@ -78,7 +82,7 @@ if __name__ == "__main__":
         guess = int(conn.recv(1024).decode())
         encrypted_guess = fhe.encrypt(guess, compiled_compare)
         encrypted_secret = fhe.encrypt(random.randint(0, 10), compiled_compare)
-        result = compiled_compare(encrypted_guess, encrypted_secret)
+        result = compare_scores(encrypted_guess, encrypted_secret)
         feedback = "Lower!" if result == 1 else "Higher or Equal!"
         conn.send(feedback.encode())
         conn.close()
