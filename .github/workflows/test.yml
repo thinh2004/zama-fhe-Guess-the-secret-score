@@ -11,10 +11,14 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
-    - name: Install dependencies
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y python3-tk
+    - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install concrete-compiler tkinter
+        pip install concrete-compiler
     - name: Run demo test
       run: python fhe_game_demo.py single  # Simulated run (non-interactive)
     - name: Lint code
